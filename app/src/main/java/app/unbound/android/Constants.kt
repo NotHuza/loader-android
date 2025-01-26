@@ -44,7 +44,7 @@ class Constants {
         const val DARK_THEME = "com.discord.theme.DarkTheme"
 
         const val FILE_LOAD = "loadScriptFromFile"
-        const val ASSET_LOAD = "LoadScriptFromAssets"
+        const val ASSET_LOAD = "loadScriptFromAssets"
         const val NEW_ACTIVITY = "newActivity"
     }
 }
