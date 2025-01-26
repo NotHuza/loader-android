@@ -1,38 +1,46 @@
 package app.unbound.android
 
+import android.content.Context
 import com.google.gson.JsonElement
 import com.google.gson.annotations.SerializedName
+import java.io.BufferedReader
+import java.io.InputStreamReader
 
-data class Addon (
+
+data class Addon(
     val bundle: Any,
     val manifest: Manifest
 )
 
-data class Theme (
+
+data class Theme(
     val bundle: ThemeJSON,
     val manifest: Manifest
 )
 
-data class ThemeJSON (
+
+data class ThemeJSON(
     @SerializedName("raw") val raw: JsonElement?,
     @SerializedName("semantic") val semantic: JsonElement?,
     @SerializedName("background") val background: JsonElement?
 )
 
-data class Manifest (
-    @SerializedName("name") var name : String,
-    @SerializedName("id") var id : String,
-    @SerializedName("description") var description : String,
-    @SerializedName("version") var version : String,
-    @SerializedName("authors") var authors : ArrayList<Authors>,
 
-    @SerializedName("bundle") var bundle : String
+data class Manifest(
+    @SerializedName("name") var name: String,
+    @SerializedName("id") var id: String,
+    @SerializedName("description") var description: String,
+    @SerializedName("version") var version: String,
+    @SerializedName("authors") var authors: ArrayList<Authors>,
+    @SerializedName("bundle") var bundle: String
 )
 
-data class Authors (
-    @SerializedName("name") var name : String,
-    @SerializedName("id") var id : String
+
+data class Authors(
+    @SerializedName("name") var name: String,
+    @SerializedName("id") var id: String
 )
+
 
 class Constants {
     companion object {
@@ -46,5 +54,25 @@ class Constants {
         const val FILE_LOAD = "loadScriptFromFile"
         const val ASSET_LOAD = "loadScriptFromAssets"
         const val NEW_ACTIVITY = "newActivity"
+
+        
+        fun loadAsset(context: Context, fileName: String): String {
+            return try {
+                val assetManager = context.assets
+                val inputStream = assetManager.open(fileName)
+                val bufferedReader = BufferedReader(InputStreamReader(inputStream))
+                val stringBuilder = StringBuilder()
+                var line: String?
+
+                while (bufferedReader.readLine().also { line = it } != null) {
+                    stringBuilder.append(line).append("\n")
+                }
+                bufferedReader.close()
+                stringBuilder.toString()
+            } catch (e: Exception) {
+                // Log or handle the exception as needed
+                "Error loading asset: ${e.message}"
+            }
+        }
     }
 }
